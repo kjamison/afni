@@ -5,6 +5,7 @@ int main(int argc, char **argv)
    char *ppp=NULL , *sin ;
    int ii, iarg=1 , do_sin=0 , do_printf=0 , do_mul=0 , do_length=1 ;
    int do_stimes=0, do_stimes_verb=0 ;
+   int do_csa1_verb=0;
 
    if( argc < 2 || strcmp(argv[1],"-help") == 0 ){
      printf("\033[0;31m");
@@ -83,7 +84,11 @@ int main(int argc, char **argv)
      }
 
      if( strcmp(argv[iarg],"-csa") == 0 ){  /* 11 Feb 2015 KJ */
-       do_sin++ ; iarg++ ; continue ;
+       do_sin++ ; do_csa1_verb++; iarg++ ; continue ;
+     }
+
+     if( strcmp(argv[iarg],"-csa1") == 0 ){  /* 11 Feb 2015 KJ */
+       do_csa1_verb++ ; iarg++ ; continue ;
      }
 
      if( strcmp(argv[iarg],"-printf") == 0 ){  /* 02 May 2008 */
@@ -128,6 +133,7 @@ int main(int argc, char **argv)
    mri_dicom_header_use_printf(do_printf) ;  /* 02 May 2008 */
    mri_dicom_header_show_size_offset(do_length) ; /* 17 Oct 2012 [rickr] */
    if( do_stimes_verb ) mri_sst_set_verb(1+do_stimes_verb); /* 02 May 2011 */
+   if( do_csa1_verb ) mri_csa1_set_verb(do_csa1_verb); /* 02 May 2011 */
 
    for( ii=iarg ; ii < argc ; ii++ ){
      if( ii > iarg )

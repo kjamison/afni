@@ -82,6 +82,12 @@ static int g_MDH_verb = 1;             /* verbose level */
 int mri_sst_get_verb(void) { return g_MDH_verb; }
 int mri_sst_set_verb(int verb) { g_MDH_verb = verb; return g_MDH_verb; }
 
+
+static int g_MDH_verb_csa1 = 1;
+int mri_csa1_get_verb(void) { return g_MDH_verb_csa1; }
+int mri_csa1_set_verb(int verb) { g_MDH_verb_csa1 = verb; return g_MDH_verb_csa1; }
+
+
 /* interface to return slice timing info (calling function should copy data)
  *                                                       12 Apr 2011 [rickr] */
 int mri_siemens_slice_times(int * nalloc, int * nused, float ** times)
@@ -2373,6 +2379,7 @@ DCM_GetObjectSize(DCM_OBJECT ** callerObject, unsigned long *returnlength)
 
 /* rcr - maybe do something better with this */
 #include "siemens_dicom_csa.c"
+#include "siemens_dicom_csa_kjprint.c" /* csa printing 05-2015 kj */
 
 static void dumpOB(unsigned char* c, long vm);
 
@@ -2599,6 +2606,9 @@ STATUS("looping over groupItem") ;
                      *                          7 May 2011 [rickr] */
                     check_for_mosaic_slice_times(elementItem);
 
+                    /* Added csa1 printing to siemens_dicom_csa.c
+                     *                          13 May 2015 [kj] */
+                    print_siemens_csa1(elementItem);
 		    break;
 
 		case DCM_OT:
