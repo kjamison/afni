@@ -7,6 +7,7 @@ int main(int argc, char **argv)
    int ntag=0 ; char **tag=NULL ;
 
    if( argc < 2 || strcmp(argv[1],"-help") == 0 ){
+     printf("\033[0;31m");
      printf("Usage: dicom_hinfo [options] fname [...]\n"
             "Prints selected information from the DICOM file 'fname' to stdout.\n"
             "Multiple files can be given on the command line; see the examples\n"
@@ -28,7 +29,11 @@ int main(int argc, char **argv)
             "\n"
             " -no_name       = Omit any filename output.\n"
             "\n"
-            "* The purpose of this program is to be used in scripts to figure out\n"
+            " -help          = Print help info and additional usage examples.\n"
+            "\n"
+            );
+      if( argc >= 2 && strcmp(argv[1],"-help") == 0 ){
+        printf("* The purpose of this program is to be used in scripts to figure out\n"
             "  which DICOM files to process for various purposes -- see Example #2.\n"
             "\n"
             "* One line is output (to stdout) for each DICOM file that the program reads.\n"
@@ -160,6 +165,9 @@ int main(int argc, char **argv)
             "--- RWCox - 15 Nov 2011 ---\n"
             "---------------------------\n"
            );
+         }
+     printf("\033[0m");
+     fflush(stdout);
      exit(0);
    }
 

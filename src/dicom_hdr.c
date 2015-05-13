@@ -7,19 +7,20 @@ int main(int argc, char **argv)
    int do_stimes=0, do_stimes_verb=0 ;
 
    if( argc < 2 || strcmp(argv[1],"-help") == 0 ){
+     printf("\033[0;31m");
      printf("Usage: dicom_hdr [options] fname [...]\n"
             "Prints information from the DICOM file 'fname' to stdout.\n"
             "Multiple files can be given on the command line.\n"
             "\n"
             "OPTIONS:\n"
-            " -hex     = Include hexadecimal printout for integer values.\n"
-            " -noname  = Don't include element names in the printout.\n"
-            " -sexinfo = Dump Siemens EXtra INFO text (0029 1020), if present\n"
-            "             (can be VERY lengthy).\n"
-            " -mulfram = Dump multi-frame information, if present\n"
-            "             (1 line per frame, plus an XML-style header/footer)\n"
-            "             [-mulfram also implies -noname]\n"
-            " -v n     = Dump n words of binary data also.\n"
+            " -hex       = Include hexadecimal printout for integer values.\n"
+            " -noname    = Don't include element names in the printout.\n"
+            " -sexinfo   = Dump Siemens EXtra INFO text (0029 1020), if present\n"
+            " *OR* -csa    (can be VERY lengthy).\n"
+            " -mulfram   = Dump multi-frame information, if present\n"
+            "               (1 line per frame, plus an XML-style header/footer)\n"
+            "               [-mulfram also implies -noname]\n"
+            " -v n       = Dump n words of binary data also.\n"
 #if 0
             " -printf  = Use 'printf' directly, instead of an intermediate string.\n"
 #endif
@@ -28,11 +29,16 @@ int main(int argc, char **argv)
             " -slice_times      = Show slice times from Siemens mosaic images.\n"
             " -slice_times_verb = Same, but be more verbose about it.\n"
             "\n"
+            " -help      = Print help info and additional usage examples.\n"
+            "\n"
             "Based on program dcm_dump_file from the RSNA, developed at\n"
             "the Mallinckrodt Institute of Radiology.  See the source\n"
             "code file mri_dicom_hdr.c for their Copyright and license.\n"
             "\n"
-            "SOME SAMPLE OUTPUT LINES:\n"
+            );
+
+     if( argc >= 2 && strcmp(argv[1],"-help") == 0 ){
+       printf("SOME SAMPLE OUTPUT LINES:\n"
             "\n"
             "0028 0010      2 [1234   ] //              IMG Rows// 512\n"
             "0028 0011      2 [1244   ] //           IMG Columns// 512\n"
@@ -60,6 +66,9 @@ int main(int argc, char **argv)
             "   values for each input file.  It can be used in a script to sort through\n"
             "   a lot of files at once.\n"
            );
+     }
+     printf("\033[0m");
+     fflush(stdout);
      exit(0);
    }
 
@@ -70,6 +79,10 @@ int main(int argc, char **argv)
    while( argv[iarg][0] == '-' ){
 
      if( strcmp(argv[iarg],"-sexinfo") == 0 ){  /* 23 Dec 2002 */
+       do_sin++ ; iarg++ ; continue ;
+     }
+
+     if( strcmp(argv[iarg],"-csa") == 0 ){  /* 11 Feb 2015 KJ */
        do_sin++ ; iarg++ ; continue ;
      }
 
