@@ -113,7 +113,10 @@ void DBG_sigfunc(int sig)   /** signal handler for fatal errors **/
 
 /*********************************************************************/
 #else /* don't USE_TRACING */
-
+   extern char * DBG_rout[DEBUG_MAX_DEPTH] ;
+   extern int DBG_num ;
+   extern int DBG_trace ;
+   extern char * DBG_labels[3] ;
 #  define ENTRY(rout)   /* nada */
 #  define DBEXIT        /* nada */
 #  define DBROUT        /* nada */
