@@ -1,0 +1,45 @@
+======================
+#copied Makefile.linux_openmp_64 to Makefile
+cp Makefile.linux_openmp_64 Makefile
+#Converted /usr/lib64/libXpm.so --> ./libXpm.a:
+ar -q ./libXpm.a /usr/lib64/libXpm.so.*
+======================
+modified Makefile:
+1. Comment out GIFTI lines since I can't find libexpat.a
+#USE_GIFTI = -DHAVE_GIFTI
+#LGIFTI = /usr/lib64/libexpat.a
+2. Comment out USE_LOCAL_X_TREE because "afniX" directory doesn't exist anyway
+#USE_LOCAL_X_TREE = 1
+3. Get rid of all the DEBUG-related precompile definitions:
+#CCDEBS = -DAFNI_DEBUG -DIMSEQ_DEBUG -DDISPLAY_DEBUG -DTHD_DEBUG
+#CEXTRA = -Wcomment -Wformat -DUSE_TRACING -DHAVE_XDBE $(CPROF) -DDONT_USE_XTDESTROY $(LESSTIF_DEFS)
+CCDEBS =
+CEXTRA = -Wcomment -Wformat -DHAVE_XDBE $(CPROF) -DDONT_USE_XTDESTROY $(LESSTIF_DEFS)
+4. Remove "-V 34" flag from CCOLD since we don't have that version of GCC
+#CCOLD = /usr/bin/gcc -V 34 -O2 -m64 -fPIC -DREAD_WRITE_64 -DLINUX2 $(CEXTRA)
+CCOLD = /usr/bin/gcc -O2 -m64 -fPIC -DREAD_WRITE_64 -DLINUX2 $(CEXTRA)
+==========================
+modified dbtrace.h:
+add extern definitions in #else clause (otherwise compiler crashes)
+#else /* don't USE_TRACING */
+extern char * DBG_rout[DEBUG_MAX_DEPTH] ;
+extern int DBG_num ;
+extern int DBG_trace ;
+extern char * DBG_labels[3] ;
+==========================
+modified f2cdir/gram.c:
+comment out the __IDSTRING line, since it crashes the compiler
+update 5/13/2015: does not seem to be necessary
+==========================
+(can of course make other modifications to dicom_hdr.c if desired):
+Add -csa alternative to -sexinfo, and include it in help printout
+Help skips the detailed usage info unless you use the -help argument
+==========================
+#Works on atlas7... some other machines give an error for /usr/lib64/libXm.a
+make clean
+make libmri.a
+make dicom_hdr
+this will take a long time though, to just remake:
+rm -f mri_read_dicom.o libmri.a dicom_hdr mri_dicom_hdr.o dicom_hinfo
+make libmri.a dicom_hdr dicom_hinfo
+
