@@ -83,7 +83,7 @@ int mri_sst_get_verb(void) { return g_MDH_verb; }
 int mri_sst_set_verb(int verb) { g_MDH_verb = verb; return g_MDH_verb; }
 
 
-static int g_MDH_verb_csa1 = 1;
+static int g_MDH_verb_csa1 = 0;
 int mri_csa1_get_verb(void) { return g_MDH_verb_csa1; }
 int mri_csa1_set_verb(int verb) { g_MDH_verb_csa1 = verb; return g_MDH_verb_csa1; }
 
